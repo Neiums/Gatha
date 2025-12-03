@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatha</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="player-container">
+            <!-- Player Controls -->
+            <div class="player-controls">
+                <div class="album-art">
+                    <img id="cover-art" alt="Album Cover">
+                    <i class="fas fa-music fa-5x default-icon"></i>
+                </div>
+
+                <div class="track-info">
+                    <h2 class="track-title">No track selected</h2>
+                    <p class="track-artist">-</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="time-display">
+                        <span class="current-time">0:00</span>
+                        <span class="total-duration">0:00</span>
+                    </div>
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn" id="shuffle-btn" title="Shuffle">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn" id="prev-btn" title="Previous">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn play-btn" id="play-btn" title="Play">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="next-btn" title="Next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn" id="repeat-btn" title="Repeat">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <div class="volume-container">
+                        <div class="volume-icon-wrapper">
+                            <i class="fas fa-volume-up volume-icon" id="volume-icon"></i>
+                        </div>
+                        <div class="volume-slider-container">
+                            <input type="range" min="0" max="100" value="80" class="volume-slider" id="volume-slider">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playlist -->
+            <div class="playlist-container">
+                <div class="playlist-header">
+                    <h3 class="playlist-title">Playlist (<span id="playlist-count">0</span>)</h3>
+                    <button class="add-btn" id="add-folder-btn">
+                        <i class="fas fa-folder-open"></i> Add Folder
+                    </button>
+                    <input type="file" id="folder-input" class="file-input" webkitdirectory directory multiple>
+                    <script>
+                        // Debug folder input
+                        document.getElementById('folder-input').addEventListener('click', function () {
+                            console.log('Folder input clicked');
+                        });
+                    </script>
+                </div>
+                <div class="playlist" id="playlist">
+                    <div class="empty-playlist">
+                        <i class="fas fa-headphones"></i>
+                        <h3>No tracks added</h3>
+                        <p>Click "Add Folder" to get started</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio"></audio>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>

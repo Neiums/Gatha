@@ -1,0 +1,72 @@
+const { app, BrowserWindow, Menu } = require('electron');
+const path = require('path');
+
+let mainWindow;
+
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 692,
+        minWidth: 800,
+        minHeight: 100,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false
+        },
+        resizable: false,
+        maximizable: false,
+        minimizable: true,
+        fullscreenable: false,
+        title: 'Gatha',
+        backgroundColor: '#f8f9fa',
+    });
+
+    mainWindow.loadFile('./src/index.html');
+
+    // Menus
+    const menuTemplate = [
+        {
+            label: 'About Us',
+            click: () => {
+                const { dialog } = require('electron');
+                dialog.showMessageBox(mainWindow, {
+                    type: 'info',
+                    title: 'About Gatha',
+                    message: `Gatha - Version ${app.getVersion()}`,
+                    detail:
+                        `Deep, sacred, and rich with the history of melody.
+
+Developer: Raymond Baghumian
+Github: https://github.com/Neiums/Gatha`,
+                    buttons: ['OK'],
+                    icon: require('path').join(__dirname, '../icon/icon.png')
+                });
+            }
+        }
+    ];
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
+
+    mainWindow.on('closed', () => {
+        mainWindow = null;
+    });
+}
+
+app.whenReady().then(createWindow);
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
+
+
