@@ -38,6 +38,9 @@ npm install
 ```bash
 npm start
 ```
+# Screenshot
+
+![Screenshot 1](./screenshots/gatha.png)
 
 ## Contributing
 
