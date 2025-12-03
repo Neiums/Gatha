@@ -11,13 +11,18 @@
         "url": "git+https://github.com/Neiums/Gatha.git"
     },
     "license": "MIT",
-    "author": "Raymond Baghumian",
     "type": "commonjs",
     "main": "./src/main.js",
+    "author": {
+        "name": "Raymond Baghumian",
+        "email": "rayiumir@gmail.com",
+        "url": "https://github.com/Neiums/Gatha"
+    },
     "scripts": {
         "start": "electron ."
     },
     "devDependencies": {
-        "electron": "^39.2.4"
+        "electron": "^39.2.4",
+        "electron-builder": "^26.0.12"
     }
 }
