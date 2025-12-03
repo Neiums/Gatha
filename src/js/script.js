@@ -16,7 +16,7 @@ const state = {
     shuffledIdx: [], blobUrl: null
 };
 
-// --- IndexedDB Helper (دیتابیس برای ذخیره فایل‌ها) ---
+// IndexedDB Helper 
 const db = {
     req: null,
     open: () => new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ const db = {
     }),
     add: async (track) => {
         const dbRef = await db.open();
-        // فایل را مستقیم ذخیره می‌کنیم
+        // We save the file directly.
         dbRef.transaction('tracks', 'readwrite').objectStore('tracks').put(track);
     },
     getAll: async () => {
@@ -51,16 +51,16 @@ const db = {
 // --- Initialization ---
 const init = async () => {
     setupEvents();
-    // بازیابی فایل‌ها از دیتابیس هنگام لود صفحه
+    // Retrieving files from the database on page load
     try {
         const savedTracks = await db.getAll();
         if (savedTracks && savedTracks.length > 0) {
             state.tracks = savedTracks;
-            // بازیابی آخرین ایندکس
+            // Retrieve the latest index
             const lastIdx = localStorage.getItem('lastIdx');
             if (lastIdx) state.idx = parseInt(lastIdx);
             renderPlaylist();
-            // لود اطلاعات ترک فعلی (بدون پخش)
+            // Load current track info (without playing)
             if(state.tracks[state.idx]) loadTrackInfo(state.tracks[state.idx]);
         }
     } catch (e) { console.error('Error loading DB:', e); }
@@ -69,24 +69,24 @@ const init = async () => {
 // --- Core Logic ---
 const loadTracks = async (files) => {
     const audioFiles = Array.from(files).filter(f => f.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a)$/i.test(f.name));
-    if (!audioFiles.length) return alert('فایل صوتی یافت نشد.');
+    if (!audioFiles.length) return alert('No audio files found.');
 
-    ui.playlist.innerHTML = '<div class="empty-playlist"><i class="fas fa-spinner fa-spin"></i><h3>در حال ذخیره در دیتابیس...</h3></div>';
+    ui.playlist.innerHTML = '<div class="empty-playlist"><i class="fas fa-spinner fa-spin"></i><h3>Saving to database...</h3></div>';
 
     for (const file of audioFiles) {
-        // چک تکراری بودن
+        // Check for duplicates
         if (state.tracks.some(t => t.name === file.name.replace(/\.[^/.]+$/, ""))) continue;
 
         const track = {
             id: Date.now() + Math.random(),
             name: file.name.replace(/\.[^/.]+$/, ""),
             artist: 'Unknown Artist',
-            file: file, // فایل واقعی در دیتابیس ذخیره می‌شود
+            file: file, // The actual file is stored in the database
             duration: 0,
             cover: null
         };
 
-        // استخراج کاور (اختیاری)
+        // Extract cover (optional)
         if (window.jsmediatags) {
             await new Promise(resolve => {
                 window.jsmediatags.read(file, {
@@ -101,13 +101,13 @@ const loadTracks = async (files) => {
                         }
                         resolve();
                     },
-                    onError: () => resolve() // حتی اگر ارور داد ادامه بده
+                    onError: () => resolve() // Continue even if there's an error
                 });
             });
         }
         
         state.tracks.push(track);
-        // ذخیره در دیتابیس
+        // Save to database
         await db.add(track);
     }
     renderPlaylist();
@@ -119,7 +119,7 @@ const playTrack = (index) => {
 
     state.idx = index;
     const t = state.tracks[index];
-    localStorage.setItem('lastIdx', index); // ذخیره موقعیت در localstorage
+    localStorage.setItem('lastIdx', index); // Save position in localStorage
 
     if (t.file) {
         state.blobUrl = URL.createObjectURL(t.file);
@@ -131,7 +131,7 @@ const playTrack = (index) => {
         renderPlaylist();
         scrollToActive();
     } else {
-        alert("فایل آسیب دیده است. لطفا دوباره اضافه کنید.");
+        alert("The file is corrupted. Please add it again.");
     }
 };
 
@@ -187,7 +187,7 @@ const changeTrack = (dir) => {
 const renderPlaylist = () => {
     ui.count.innerText = state.tracks.length;
     if (!state.tracks.length) {
-        ui.playlist.innerHTML = `<div class="empty-playlist"><i class="fas fa-music"></i><h3>لیست خالی است</h3></div>`;
+        ui.playlist.innerHTML = `<div class="empty-playlist"><i class="fas fa-music"></i><h3>The playlist is empty</h3></div>`;
         return;
     }
     ui.playlist.innerHTML = state.tracks.map((t, i) => `
