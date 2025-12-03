@@ -1,0 +1,20 @@
+{
+  "name": "gatha",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Neiums/Gatha#readme",
+  "bugs": {
+    "url": "https://github.com/Neiums/Gatha/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neiums/Gatha.git"
+  },
+  "license": "MIT",
+  "author": "Raymond Baghumian",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
